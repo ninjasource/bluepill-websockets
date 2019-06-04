@@ -3,7 +3,7 @@
     "configurations": [
         {
             "cwd": "${workspaceRoot}",
-            "executable": "./target/thumbv7m-none-eabi/release/bluepill-websockets",
+            "executable": "./target/thumbv7m-none-eabi/debug/bluepill-websockets",
             "name": "Debug Microcontroller",
             "request": "launch",
             "type": "cortex-debug",

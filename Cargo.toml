@@ -12,7 +12,6 @@ cortex-m = "0.6.0"
 embedded-websockets = { path = "../embedded-websockets" }
 w5500 = { path = "../w5500" }
 embedded-hal = "0.2.3"
-#stm32f1 = "0.5.0"
 
 [dependencies.stm32f1xx-hal]
 version = "0.3.0"
@@ -22,3 +21,11 @@ features = ["stm32f103", "rt"]
 doc = []
 rt = ["stm32f1xx-hal/rt"]
 stm32f103 = ["stm32f1xx-hal/stm32f103"]
+
+# this allows debugging in release mode (otherwise you only see assembly)
+[profile.release]
+debug = true
+
+# this makes the binary small enough to fit on the device while still being able to build and upload in debug mode
+[profile.dev]
+opt-level = 's'

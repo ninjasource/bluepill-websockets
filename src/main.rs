@@ -7,21 +7,21 @@ extern crate panic_itm;
 #[macro_use]
 extern crate cortex_m;
 
-use stm32f1xx_hal::{prelude::*};
+use stm32f1xx_hal::prelude::*;
 
 use core::str::Utf8Error;
-use cortex_m::{peripheral::itm::Stim};
+use cortex_m::peripheral::itm::Stim;
 use cortex_m_rt::entry;
 use embedded_hal::spi::FullDuplex;
 use embedded_websockets as ws;
 use w5500::{IpAddress, MacAddress, Socket, SocketStatus, W5500};
 use ws::{WebSocket, WebSocketReceiveMessageType, WebSocketSendMessageType, WebSocketState};
 
-use embedded_hal::{spi::Mode, spi::Phase, spi::Polarity, digital::OutputPin};
+use embedded_hal::{digital::OutputPin, spi::Mode, spi::Phase, spi::Polarity};
 
-use stm32f1xx_hal as hal;
 use hal::spi::Spi;
 use hal::stm32;
+use stm32f1xx_hal as hal;
 
 type SpiFullDuplex = FullDuplex<u8, Error = hal::spi::Error>;
 
@@ -108,14 +108,25 @@ fn main() -> ! {
         &mut rcc.apb2,
     );
 
-    run_web_server(&mut spi, &mut itm.stim[0], &mut delay, &mut cs_ethernet, &button).unwrap();
+    run_web_server(
+        &mut spi,
+        &mut itm.stim[0],
+        &mut delay,
+        &mut cs_ethernet,
+        &button,
+    )
+    .unwrap();
 
-    loop {
-
-    }
+    loop {}
 }
 
-fn run_web_server(spi: &mut SpiFullDuplex, itm: &mut Stim, delay : &mut hal::delay::Delay, cs_ethernet: &mut embedded_hal::digital::OutputPin, button: &embedded_hal::digital::InputPin) -> Result<(), WebServerError> {
+fn run_web_server(
+    spi: &mut SpiFullDuplex,
+    itm: &mut Stim,
+    delay: &mut hal::delay::Delay,
+    cs_ethernet: &mut embedded_hal::digital::OutputPin,
+    button: &embedded_hal::digital::InputPin,
+) -> Result<(), WebServerError> {
     let root_html = "HTTP/1.1 200 OK\r\nContent-Type: text/html; charset=UTF-8\r\nContent-Length: 2591\r\nConnection: close\r\n\r\n<!doctype html>
 <html>
 <head>
@@ -280,11 +291,11 @@ fn run_web_server(spi: &mut SpiFullDuplex, itm: &mut Stim, delay : &mut hal::del
                         }
                         _ => {} // do nothing
                     }
-                },
+                }
                 Ok(None) => {
                     iprintln!(itm, "ERROR Unknown socket status");
-                    return Ok(())
-                },
+                    return Ok(());
+                }
                 Err(_e) => iprintln!(itm, "ERROR Cannot read socket status"),
             };
         }
